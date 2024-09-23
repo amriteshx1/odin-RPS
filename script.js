@@ -1,58 +1,65 @@
-function getComputerChoice(){
+let userScore = 0;
+let computerScore = 0;
+
+function getComputerChoice() {
     const choice = ["ROCK", "PAPER", "SCISSORS"];
-    const arrayindex = Math.floor(Math.random()*choice.length);
-    
-    return choice[arrayindex];
+    const arrayIndex = Math.floor(Math.random() * choice.length);
+    return choice[arrayIndex];
 }
 
-function getHumanChoice(){
-    const userChoice = prompt("Rock/Paper/Scissors:\n\n(Let's have a 5-round 1v1, See You in the Console!)").toUpperCase();
-    if(userChoice == "ROCK" || userChoice == "PAPER" || userChoice== "SCISSORS"){
-        return userChoice;
+function playRound(userChoice){
+    const computerChoice = getComputerChoice();
+    const msg = document.getElementById("msg");
+
+    if(userChoice === computerChoice){
+        msg.innerText =(`It's a tie! Both chose ${userChoice}`);
+        msg.style.backgroundColor = "gray";
+    }else if((userChoice === "ROCK" && computerChoice === "SCISSORS") ||
+             (userChoice === "PAPER" && computerChoice === "ROCK") ||
+             (userChoice === "SCISSORS" && computerChoice === "PAPER")){
+                msg.innerText = (`You won! ${userChoice} beats ${computerChoice}`);
+                msg.style.backgroundColor = "green";
+                userScore++;
     }else{
-        alert("Invalid Input, Try again!");
-        return getHumanChoice();
+        msg.innerText = (`You lost! ${computerChoice} beats ${userChoice}`);
+        msg.style.backgroundColor = "red";
+        computerScore++;
+    }
+
+    updateScore();
+    checkWinner();
+}
+
+function updateScore(){
+    document.getElementById("user-score").innerText = userScore;
+    document.getElementById("comp-score").innerText = computerScore;
+}
+
+function checkWinner(){
+    const msg = document.getElementById("msg");
+    if(userScore === 5){
+        msg.innerText= ("Congratulations! You won 🎉");
+        msg.style.backgroundColor = "gold";
+        resetGame();
+    }else if(computerScore === 5){
+        msg.innerText=("Computer won! Better luck next time 🤗");
+        msg.style.backgroundColor = "yellow";
+        resetGame();
     }
 }
 
-let humanScore= 0;
-let computerScore= 0;
-
-function playRound(humanChoice, computerChoice){
-    humanChoice= humanChoice.toUpperCase();
-
-    if(humanChoice== computerChoice){
-        console.log(`It's a tie! You both choose ${humanChoice}`);
-    }else if((humanChoice === 'ROCK' && computerChoice === 'SCISSORS') ||
-        (humanChoice === 'PAPER' && computerChoice === 'ROCK') ||
-        (humanChoice === 'SCISSORS' && computerChoice === 'PAPER'))
-        {
-            console.log(`You won! ${humanChoice} beats ${computerChoice}`);
-            humanScore++;
-        }else{
-            console.log(`You lost! ${computerChoice} beats ${humanChoice}`);
-            computerScore++;
-        }    
-}
-
-function playGame(){
-    humanScore = 0;
+function resetGame(){
+    userScore = 0;
     computerScore = 0;
-
-    for (let i = 0; i < 5; i++) {
-        const humanSelection = getHumanChoice();
-        const computerSelection = getComputerChoice();
-        playRound(humanSelection, computerSelection);
-    }
-
-    if (humanScore > computerScore) {
-        console.log(`\nCongratulations, You won!!!\nFinal score: You ${humanScore}, Computer ${computerScore}`);
-    } else if (computerScore > humanScore) {
-        console.log(`\nAhhhh, You lost!!!\nFinal score: Computer ${computerScore}, You ${humanScore}`);
-    } else {
-        console.log(`\nIt's a tie! Final score: You ${humanScore}, Computer ${computerScore}`);
-    }
+    updateScore();
 }
 
-playGame();
+document.querySelectorAll(".choice").forEach(choice => {
+    choice.addEventListener("click",() =>{
+        playRound(choice.id.toUpperCase());
+    })
+})
+
+
+
 
