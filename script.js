@@ -40,10 +40,12 @@ function checkWinner(){
     if(userScore === 5){
         msg.innerText= ("Congratulations! You won 🎉");
         msg.style.backgroundColor = "gold";
+        msg.style.color = "black";
         resetGame();
     }else if(computerScore === 5){
         msg.innerText=("Computer won! Better luck next time 🤗");
         msg.style.backgroundColor = "yellow";
+        msg.style.color = "black";
         resetGame();
     }
 }
